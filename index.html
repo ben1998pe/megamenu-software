@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MegaMenu Demo - GrowBy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        .mega-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .mega-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .dropdown-menu {
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .dropdown-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        
+        .nav-item::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-item:hover::after,
+        .nav-item:focus::after {
+            width: 100%;
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        
+        .accordion-content.active {
+            max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 font-sans antialiased">
+    <!-- Header Sticky con Blur -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 shadow-sm transition-all duration-300" id="header">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400">
+                        GrowBy
+                    </a>
+                </div>
+
+                <!-- Navegación Desktop -->
+                <nav class="hidden lg:flex space-x-8" role="menubar" aria-label="Navegación principal">
+                    <!-- Home -->
+                    <div class="relative">
+                        <a href="/" class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            Home
+                        </a>
+                    </div>
+
+                    <!-- ¿Quiénes Somos? -->
+                    <div class="relative">
+                        <a href="/quienes-somos/" class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            ¿Quiénes Somos?
+                        </a>
+                    </div>
+
+                    <!-- Servicios - MegaMenu -->
+                    <div class="relative group" id="servicios-menu">
+                        <button class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                id="servicios-button">
+                            Servicios
+                            <svg class="ml-1 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- MegaMenu Panel -->
+                        <div class="mega-menu absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-screen max-w-6xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-8" 
+                             role="menu" 
+                             aria-labelledby="servicios-button">
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                                <!-- Columna 1: Desarrollo de Software -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        <a href="/servicios/desarrollo-software/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                            Desarrollo de Software
+                                        </a>
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="/desarrollo-software/frontend-backend" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Desarrollo frontend y backend</a></li>
+                                        <li><a href="/desarrollo-software/cms" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Desarrollo sobre CMS's</a></li>
+                                        <li><a href="/desarrollo-software/apps-moviles" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Desarrollo de aplicaciones móviles</a></li>
+                                        <li><a href="/desarrollo-software/erp-crm" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Implementación de ERPs y CRMs</a></li>
+                                        <li><a href="/desarrollo-software/cloud-automation" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Cloud Services & Automation tools</a></li>
+                                        <li><a href="/desarrollo-software/assessment" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Assessment tecnológico</a></li>
+                                        <li><a href="/desarrollo-software/digitalizacion" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Digitalización de procesos</a></li>
+                                        <li><a href="/desarrollo-software/cocreacion" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Cocreación de productos</a></li>
+                                        <li><a href="/desarrollo-software/transformacion" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Transformación digital y cultural</a></li>
+                                        <li><a href="/desarrollo-software/service-design" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Service Design (enfoque técnico)</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Columna 2: Diseño de Producto -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        <a href="/servicios/diseno-producto/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                            Diseño de Producto
+                                        </a>
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="/diseno-producto/ux-research" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">UX Research</a></li>
+                                        <li><a href="/diseno-producto/ui-design" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">UI Design</a></li>
+                                        <li><a href="/diseno-producto/branding-digital" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Branding</a></li>
+                                        <li><a href="/diseno-producto/diseno-digital" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Diseño digital</a></li>
+                                        <li><a href="/diseno-producto/audiovisual" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Fotografía y audiovisual</a></li>
+                                        <li><a href="/diseno-producto/service-design" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Service Design</a></li>
+                                        <li><a href="/diseno-producto/prototipado-testing" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Prototipado / testing</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Columna 3: Reclutamiento de Talento -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        <a href="/servicios/reclutamiento-talento/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                            Reclutamiento de Talento
+                                        </a>
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="/reclutamiento-talento/headhunting" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Head Hunting</a></li>
+                                        <li><a href="/reclutamiento-talento/outsourcing-ti" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Outsourcing TI</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Columna 4: Inteligencia Artificial -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        <a href="/servicios/inteligencia-artificial/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                            Inteligencia Artificial
+                                        </a>
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="/inteligencia-artificial/asesoramiento" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Asesoramiento en IA</a></li>
+                                        <li><a href="/inteligencia-artificial/implementacion" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Implementación de IA a medida</a></li>
+                                        <li><a href="/inteligencia-artificial/automatizacion-procesos" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Automatización de procesos con IA</a></li>
+                                    </ul>
+                                </div>
+
+                                <!-- Columna 5: Ecommerce -->
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                                        <a href="/servicios/ecommerce/" class="hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                            Ecommerce
+                                        </a>
+                                    </h3>
+                                    <ul class="space-y-3">
+                                        <li><a href="/ecommerce/implementacion" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Implementación Ecommerce</a></li>
+                                        <li><a href="/ecommerce/integraciones" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Integración Ecommerce</a></li>
+                                        <li><a href="/ecommerce/soporte" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">Soporte Ecommerce</a></li>
+                                        <li><a href="/ecommerce/vtex" class="text-sm text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">VTEX</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Soy Especialista - Dropdown -->
+                    <div class="relative group" id="especialista-menu">
+                        <button class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                id="especialista-button">
+                            Soy Especialista
+                            <svg class="ml-1 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2" 
+                             role="menu" 
+                             aria-labelledby="especialista-button">
+                            <a href="/especialistas/por-que-registrarme" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                ¿Por qué registrarme?
+                            </a>
+                            <a href="/especialistas/oportunidades" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Oportunidades laborales
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Recursos - Dropdown -->
+                    <div class="relative group" id="recursos-menu">
+                        <button class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                id="recursos-button">
+                            Recursos
+                            <svg class="ml-1 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu absolute left-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2" 
+                             role="menu" 
+                             aria-labelledby="recursos-button">
+                            <a href="/blog/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Blog
+                            </a>
+                            <a href="/webinars/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                GrowBy Talks
+                            </a>
+                            <a href="/casos-exito/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Casos de Éxito
+                            </a>
+                            <a href="/ebooks/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Ebooks
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Solicitar información -->
+                    <div class="relative">
+                        <a href="/contacto/" class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200">
+                            Solicitar información
+                        </a>
+                    </div>
+
+                    <!-- Registro - Dropdown -->
+                    <div class="relative group" id="registro-menu">
+                        <button class="nav-item relative inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200" 
+                                aria-haspopup="true" 
+                                aria-expanded="false"
+                                id="registro-button">
+                            Registro
+                            <svg class="ml-1 h-4 w-4 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                            </svg>
+                        </button>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="dropdown-menu absolute right-0 top-full mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2" 
+                             role="menu" 
+                             aria-labelledby="registro-button">
+                            <a href="/soy-empresa/" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Solicitar Cotización
+                            </a>
+                            <a href="https://app.growby.tech/register?i-am=specialist" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Soy especialista
+                            </a>
+                            <a href="https://app.growby.tech/register?i-am=business" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors">
+                                Soy empresa
+                            </a>
+                        </div>
+                    </div>
+                </nav>
+
+                <!-- Botón de menú móvil -->
+                <div class="lg:hidden">
+                    <button class="mobile-menu-button p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" 
+                            aria-label="Abrir menú móvil"
+                            id="mobile-menu-button">
+                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Botón Dark Mode -->
+    <button class="fixed bottom-6 right-6 z-30 p-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-700 transition-all duration-200" 
+            id="dark-mode-toggle"
+            aria-label="Cambiar modo oscuro">
+        <svg class="h-6 w-6 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+        </svg>
+        <svg class="h-6 w-6 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+        </svg>
+    </button>
+
+    <!-- Contenido Principal -->
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section class="bg-gradient-to-br from-primary-50 to-blue-100 dark:from-gray-800 dark:to-gray-900 py-20">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
+                    MegaMenu <span class="text-primary-600 dark:text-primary-400">Moderno</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto">
+                    Demo completo de navegación con Tailwind CSS y JavaScript vanilla. 
+                    Incluye MegaMenu responsivo, dark mode y accesibilidad completa.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                    <a href="#demo" class="inline-flex items-center px-8 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors duration-200">
+                        Ver Demo
+                    </a>
+                    <button class="inline-flex items-center px-8 py-3 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-lg border border-gray-300 dark:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+                        Documentación
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Demo -->
+        <section id="demo" class="py-20 bg-white dark:bg-gray-900">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                        Características del MegaMenu
+                    </h2>
+                    <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                        Navega por el menú superior para experimentar todas las funcionalidades implementadas.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Característica 1 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">MegaMenu Responsivo</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Panel ancho con 5 columnas organizadas por categorías de servicios.</p>
+                    </div>
+
+                    <!-- Característica 2 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Dark Mode</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Soporte completo para modo oscuro con transiciones suaves.</p>
+                    </div>
+
+                    <!-- Característica 3 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Accesibilidad</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Roles ARIA, navegación por teclado y soporte para lectores de pantalla.</p>
+                    </div>
+
+                    <!-- Característica 4 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Menú Móvil</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Navegación completa con acordeones para dispositivos móviles.</p>
+                    </div>
+
+                    <!-- Característica 5 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Transiciones</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Animaciones suaves con fade y slide para una experiencia premium.</p>
+                    </div>
+
+                    <!-- Característica 6 -->
+                    <div class="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700">
+                        <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-primary-600 dark:text-primary-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">Tailwind CSS</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Construido completamente con Tailwind CSS via CDN para máxima flexibilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Menú Móvil -->
+    <div class="mobile-menu fixed inset-0 z-40 lg:hidden bg-white dark:bg-gray-900" id="mobile-menu">
+        <div class="flex flex-col h-full">
+            <!-- Header del menú móvil -->
+            <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+                <span class="text-xl font-bold text-primary-600 dark:text-primary-400">GrowBy</span>
+                <button class="mobile-close-button p-2 rounded-md text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" 
+                        aria-label="Cerrar menú móvil"
+                        id="mobile-close-button">
+                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Contenido del menú móvil -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-4">
+                <!-- Home -->
+                <a href="/" class="block py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                    Home
+                </a>
+
+                <!-- ¿Quiénes Somos? -->
+                <a href="/quienes-somos/" class="block py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                    ¿Quiénes Somos?
+                </a>
+
+                <!-- Servicios - Acordeón -->
+                <div class="accordion-item">
+                    <button class="accordion-button w-full flex items-center justify-between py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
+                            aria-expanded="false"
+                            id="mobile-servicios-button">
+                        <span>Servicios</span>
+                        <svg class="accordion-icon h-5 w-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="accordion-content" id="mobile-servicios-content">
+                        <div class="pl-4 space-y-2 mt-2">
+                            <!-- Desarrollo de Software -->
+                            <div class="space-y-2">
+                                <a href="/servicios/desarrollo-software/" class="block py-2 px-4 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                    Desarrollo de Software
+                                </a>
+                                <div class="pl-4 space-y-1">
+                                    <a href="/desarrollo-software/frontend-backend" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Desarrollo frontend y backend</a>
+                                    <a href="/desarrollo-software/cms" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Desarrollo sobre CMS's</a>
+                                    <a href="/desarrollo-software/apps-moviles" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Desarrollo de aplicaciones móviles</a>
+                                    <a href="/desarrollo-software/erp-crm" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Implementación de ERPs y CRMs</a>
+                                    <a href="/desarrollo-software/cloud-automation" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Cloud Services & Automation tools</a>
+                                    <a href="/desarrollo-software/assessment" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Assessment tecnológico</a>
+                                    <a href="/desarrollo-software/digitalizacion" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Digitalización de procesos</a>
+                                    <a href="/desarrollo-software/cocreacion" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Cocreación de productos</a>
+                                    <a href="/desarrollo-software/transformacion" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Transformación digital y cultural</a>
+                                    <a href="/desarrollo-software/service-design" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Service Design (enfoque técnico)</a>
+                                </div>
+                            </div>
+
+                            <!-- Diseño de Producto -->
+                            <div class="space-y-2">
+                                <a href="/servicios/diseno-producto/" class="block py-2 px-4 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                    Diseño de Producto
+                                </a>
+                                <div class="pl-4 space-y-1">
+                                    <a href="/diseno-producto/ux-research" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• UX Research</a>
+                                    <a href="/diseno-producto/ui-design" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• UI Design</a>
+                                    <a href="/diseno-producto/branding-digital" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Branding</a>
+                                    <a href="/diseno-producto/diseno-digital" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Diseño digital</a>
+                                    <a href="/diseno-producto/audiovisual" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Fotografía y audiovisual</a>
+                                    <a href="/diseno-producto/service-design" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Service Design</a>
+                                    <a href="/diseno-producto/prototipado-testing" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Prototipado / testing</a>
+                                </div>
+                            </div>
+
+                            <!-- Reclutamiento de Talento -->
+                            <div class="space-y-2">
+                                <a href="/servicios/reclutamiento-talento/" class="block py-2 px-4 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                    Reclutamiento de Talento
+                                </a>
+                                <div class="pl-4 space-y-1">
+                                    <a href="/reclutamiento-talento/headhunting" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Head Hunting</a>
+                                    <a href="/reclutamiento-talento/outsourcing-ti" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Outsourcing TI</a>
+                                </div>
+                            </div>
+
+                            <!-- Inteligencia Artificial -->
+                            <div class="space-y-2">
+                                <a href="/servicios/inteligencia-artificial/" class="block py-2 px-4 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                    Inteligencia Artificial
+                                </a>
+                                <div class="pl-4 space-y-1">
+                                    <a href="/inteligencia-artificial/asesoramiento" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Asesoramiento en IA</a>
+                                    <a href="/inteligencia-artificial/implementacion" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Implementación de IA a medida</a>
+                                    <a href="/inteligencia-artificial/automatizacion-procesos" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Automatización de procesos con IA</a>
+                                </div>
+                            </div>
+
+                            <!-- Ecommerce -->
+                            <div class="space-y-2">
+                                <a href="/servicios/ecommerce/" class="block py-2 px-4 text-base font-medium text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                    Ecommerce
+                                </a>
+                                <div class="pl-4 space-y-1">
+                                    <a href="/ecommerce/implementacion" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Implementación Ecommerce</a>
+                                    <a href="/ecommerce/integraciones" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Integración Ecommerce</a>
+                                    <a href="/ecommerce/soporte" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• Soporte Ecommerce</a>
+                                    <a href="/ecommerce/vtex" class="block py-1 px-4 text-sm text-gray-500 dark:text-gray-500 hover:text-primary-600 dark:hover:text-primary-400">• VTEX</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Soy Especialista - Acordeón -->
+                <div class="accordion-item">
+                    <button class="accordion-button w-full flex items-center justify-between py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
+                            aria-expanded="false"
+                            id="mobile-especialista-button">
+                        <span>Soy Especialista</span>
+                        <svg class="accordion-icon h-5 w-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="accordion-content" id="mobile-especialista-content">
+                        <div class="pl-4 space-y-2 mt-2">
+                            <a href="/especialistas/por-que-registrarme" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                ¿Por qué registrarme?
+                            </a>
+                            <a href="/especialistas/oportunidades" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Oportunidades laborales
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recursos - Acordeón -->
+                <div class="accordion-item">
+                    <button class="accordion-button w-full flex items-center justify-between py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
+                            aria-expanded="false"
+                            id="mobile-recursos-button">
+                        <span>Recursos</span>
+                        <svg class="accordion-icon h-5 w-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="accordion-content" id="mobile-recursos-content">
+                        <div class="pl-4 space-y-2 mt-2">
+                            <a href="/blog/" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Blog
+                            </a>
+                            <a href="/webinars/" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                GrowBy Talks
+                            </a>
+                            <a href="/casos-exito/" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Casos de Éxito
+                            </a>
+                            <a href="/ebooks/" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Ebooks
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solicitar información -->
+                <a href="/contacto/" class="block py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors">
+                    Solicitar información
+                </a>
+
+                <!-- Registro - Acordeón -->
+                <div class="accordion-item">
+                    <button class="accordion-button w-full flex items-center justify-between py-3 px-4 text-lg font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-lg transition-colors" 
+                            aria-expanded="false"
+                            id="mobile-registro-button">
+                        <span>Registro</span>
+                        <svg class="accordion-icon h-5 w-5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </button>
+                    <div class="accordion-content" id="mobile-registro-content">
+                        <div class="pl-4 space-y-2 mt-2">
+                            <a href="/soy-empresa/" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Solicitar Cotización
+                            </a>
+                            <a href="https://app.growby.tech/register?i-am=specialist" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Soy especialista
+                            </a>
+                            <a href="https://app.growby.tech/register?i-am=business" class="block py-2 px-4 text-base text-gray-600 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400">
+                                Soy empresa
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // ===== CONFIGURACIÓN Y VARIABLES GLOBALES =====
+        const isMobile = () => window.innerWidth < 1024;
+        let currentOpenMenu = null;
+        let currentOpenDropdown = null;
+
+        // ===== ELEMENTOS DOM =====
+        const header = document.getElementById('header');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileCloseButton = document.getElementById('mobile-close-button');
+        const darkModeToggle = document.getElementById('dark-mode-toggle');
+
+        // ===== FUNCIONES DE MENÚ DESKTOP =====
+        
+        // Función para abrir MegaMenu
+        function openMegaMenu(menuElement) {
+            if (currentOpenMenu && currentOpenMenu !== menuElement) {
+                closeMegaMenu(currentOpenMenu);
+            }
+            
+            const megaMenu = menuElement.querySelector('.mega-menu');
+            const button = menuElement.querySelector('button');
+            
+            megaMenu.classList.add('active');
+            button.setAttribute('aria-expanded', 'true');
+            currentOpenMenu = menuElement;
+        }
+
+        // Función para cerrar MegaMenu
+        function closeMegaMenu(menuElement) {
+            const megaMenu = menuElement.querySelector('.mega-menu');
+            const button = menuElement.querySelector('button');
+            
+            megaMenu.classList.remove('active');
+            button.setAttribute('aria-expanded', 'false');
+            currentOpenMenu = null;
+        }
+
+        // Función para abrir dropdown
+        function openDropdown(dropdownElement) {
+            if (currentOpenDropdown && currentOpenDropdown !== dropdownElement) {
+                closeDropdown(currentOpenDropdown);
+            }
+            
+            const dropdownMenu = dropdownElement.querySelector('.dropdown-menu');
+            const button = dropdownElement.querySelector('button');
+            
+            dropdownMenu.classList.add('active');
+            button.setAttribute('aria-expanded', 'true');
+            currentOpenDropdown = dropdownElement;
+        }
+
+        // Función para cerrar dropdown
+        function closeDropdown(dropdownElement) {
+            const dropdownMenu = dropdownElement.querySelector('.dropdown-menu');
+            const button = dropdownElement.querySelector('button');
+            
+            dropdownMenu.classList.remove('active');
+            button.setAttribute('aria-expanded', 'false');
+            currentOpenDropdown = null;
+        }
+
+        // ===== FUNCIONES DE MENÚ MÓVIL =====
+        
+        // Función para abrir menú móvil
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Función para cerrar menú móvil
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Función para toggle acordeón móvil
+        function toggleMobileAccordion(buttonId, contentId) {
+            const button = document.getElementById(buttonId);
+            const content = document.getElementById(contentId);
+            const icon = button.querySelector('.accordion-icon');
+            
+            const isExpanded = button.getAttribute('aria-expanded') === 'true';
+            
+            if (isExpanded) {
+                content.classList.remove('active');
+                button.setAttribute('aria-expanded', 'false');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                content.classList.add('active');
+                button.setAttribute('aria-expanded', 'true');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // ===== FUNCIONES DE DARK MODE =====
+        
+        // Función para cambiar dark mode
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        // Función para inicializar dark mode
+        function initDarkMode() {
+            const savedMode = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            
+            if (savedMode === 'true' || (savedMode === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+        }
+
+        // ===== FUNCIONES DE SCROLL =====
+        
+        // Función para manejar scroll del header
+        function handleHeaderScroll() {
+            if (window.scrollY > 10) {
+                header.classList.add('shadow-lg');
+                header.classList.add('bg-white/95');
+                header.classList.add('dark:bg-gray-900/95');
+            } else {
+                header.classList.remove('shadow-lg');
+                header.classList.remove('bg-white/95');
+                header.classList.remove('dark:bg-gray-900/95');
+            }
+        }
+
+        // ===== EVENT LISTENERS =====
+        
+        // Event listeners para menú desktop
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inicializar dark mode
+            initDarkMode();
+            
+            // Event listeners para MegaMenu
+            const serviciosMenu = document.getElementById('servicios-menu');
+            if (serviciosMenu) {
+                serviciosMenu.addEventListener('mouseenter', () => {
+                    if (!isMobile()) openMegaMenu(serviciosMenu);
+                });
+                serviciosMenu.addEventListener('mouseleave', () => {
+                    if (!isMobile()) closeMegaMenu(serviciosMenu);
+                });
+            }
+
+            // Event listeners para dropdowns
+            const dropdownMenus = ['especialista-menu', 'recursos-menu', 'registro-menu'];
+            dropdownMenus.forEach(menuId => {
+                const menu = document.getElementById(menuId);
+                if (menu) {
+                    menu.addEventListener('mouseenter', () => {
+                        if (!isMobile()) openDropdown(menu);
+                    });
+                    menu.addEventListener('mouseleave', () => {
+                        if (!isMobile()) closeDropdown(menu);
+                    });
+                }
+            });
+
+            // Event listeners para menú móvil
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', openMobileMenu);
+            }
+            
+            if (mobileCloseButton) {
+                mobileCloseButton.addEventListener('click', closeMobileMenu);
+            }
+
+            // Event listeners para acordeones móviles
+            const accordionButtons = [
+                'mobile-servicios-button',
+                'mobile-especialista-button', 
+                'mobile-recursos-button',
+                'mobile-registro-button'
+            ];
+            
+            accordionButtons.forEach(buttonId => {
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    button.addEventListener('click', () => {
+                        const contentId = buttonId.replace('-button', '-content');
+                        toggleMobileAccordion(buttonId, contentId);
+                    });
+                }
+            });
+
+            // Event listener para dark mode
+            if (darkModeToggle) {
+                darkModeToggle.addEventListener('click', toggleDarkMode);
+            }
+
+            // Event listener para scroll
+            window.addEventListener('scroll', handleHeaderScroll);
+            
+            // Event listener para resize
+            window.addEventListener('resize', () => {
+                if (!isMobile()) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Event listener para teclado (Escape)
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    if (mobileMenu.classList.contains('active')) {
+                        closeMobileMenu();
+                    }
+                    if (currentOpenMenu) {
+                        closeMegaMenu(currentOpenMenu);
+                    }
+                    if (currentOpenDropdown) {
+                        closeDropdown(currentOpenDropdown);
+                    }
+                }
+            });
+
+            // Event listener para clicks fuera de menús
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('.group') && !e.target.closest('.mobile-menu')) {
+                    if (currentOpenMenu) {
+                        closeMegaMenu(currentOpenMenu);
+                    }
+                    if (currentOpenDropdown) {
+                        closeDropdown(currentOpenDropdown);
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
