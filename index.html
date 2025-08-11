@@ -28,12 +28,14 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
-        .mega-menu {
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+                         .mega-menu {
+                     opacity: 0;
+                     visibility: hidden;
+                     transform: translateY(-10px);
+                     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                     max-width: calc(100vw - 2rem);
+                     overflow-x: hidden;
+                 }
         
         .mega-menu.active {
             opacity: 1;
@@ -131,10 +133,10 @@
                         </button>
                         
                         <!-- MegaMenu Panel -->
-                        <div class="mega-menu absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-screen max-w-6xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-8" 
+                        <div class="mega-menu absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-[calc(100vw-2rem)] max-w-5xl bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6" 
                              role="menu" 
                              aria-labelledby="servicios-button">
-                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
+                                                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
                                 <!-- Columna 1: Desarrollo de Software -->
                                 <div>
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">
